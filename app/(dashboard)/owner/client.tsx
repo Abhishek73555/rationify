@@ -28,7 +28,7 @@ export default function OwnerDashboardClient({ initialData }: { initialData: any
     }
   }
 
-  const container = {
+  const container: any = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -36,7 +36,7 @@ export default function OwnerDashboardClient({ initialData }: { initialData: any
     }
   }
 
-  const item = {
+  const item: any = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
   }
