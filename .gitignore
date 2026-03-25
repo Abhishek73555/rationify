@@ -40,6 +40,4 @@ next-env.d.ts
 .env.*
 
 # sqlite
-*.db
-*.db-journal
-dev.db
+# Removed by Agent for Vercel Deployment so the mock DB gets deployed online!
