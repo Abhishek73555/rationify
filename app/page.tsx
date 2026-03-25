@@ -1,101 +1,98 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import Image from "next/image"
+import Link from "next/link"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { ShieldAlert, Users, Truck, ArrowRight } from "lucide-react"
+
+export default function HomePage() {
+  const { scrollY } = useScroll()
+  const y1 = useTransform(scrollY, [0, 500], [0, 200])
+  const y2 = useTransform(scrollY, [0, 500], [0, -100])
+  
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen flex flex-col items-center overflow-x-hidden bg-[#0A0A0B] text-white relative font-sans selection:bg-emerald-500/30">
+      {/* Intense Parallax Background / Glassmorphism Elements */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <motion.div style={{ y: y1 }} className="absolute -top-[20%] -left-[10%] w-[800px] h-[800px] bg-emerald-600/20 rounded-full blur-[120px] mix-blend-screen opacity-50" />
+        <motion.div style={{ y: y2 }} className="absolute top-[40%] -right-[20%] w-[900px] h-[900px] bg-sky-600/20 rounded-full blur-[150px] mix-blend-screen opacity-40" />
+        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay" />
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <div className="w-full max-w-5xl z-10 flex flex-col items-center pt-24 pb-32 px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center mb-16 flex flex-col items-center"
+        >
+          <div className="size-32 rounded-3xl bg-white/5 border border-white/10 shadow-[0_0_40px_rgba(16,185,129,0.3)] backdrop-blur-3xl flex items-center justify-center p-4 mb-8">
+            <Image src="/logo.png" alt="Rationify Logo" width={100} height={100} className="object-contain drop-shadow-md" priority />
+          </div>
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter bg-gradient-to-br from-white via-white/90 to-white/40 bg-clip-text text-transparent mb-4 drop-shadow-sm">
+            Rationify Next-Gen
+          </h1>
+          <p className="text-xl md:text-2xl text-zinc-400 font-medium max-w-2xl text-balance">
+            A decentralized, ultra-secure Public Distribution System. Enter the portal below.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+          {[
+            {
+              role: "Consumer",
+              desc: "Book slots, track deliveries, and file complaints",
+              icon: Users,
+              href: "/consumer",
+              themeGroup: "group-hover:text-emerald-400 border-emerald-500/30 bg-emerald-500/20 text-emerald-400 text-emerald-500",
+              buttonColor: "text-emerald-400"
+            },
+            {
+              role: "Delivery",
+              desc: "Manage active shipments and verify OTPs",
+              icon: Truck,
+              href: "/delivery",
+              themeGroup: "group-hover:text-sky-400 border-sky-500/30 bg-sky-500/20 text-sky-400 text-sky-500",
+              buttonColor: "text-sky-400"
+            },
+            {
+              role: "Owner",
+              desc: "Monitor analytics and approve distributions",
+              icon: ShieldAlert,
+              href: "/owner",
+              themeGroup: "group-hover:text-orange-400 border-orange-500/30 bg-orange-500/20 text-orange-400 text-orange-500",
+              buttonColor: "text-orange-400"
+            }
+          ].map((item, i) => (
+            <motion.div
+              key={item.role}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+            >
+              <Link href={item.href} className="block group h-full">
+                <div className="relative h-full flex flex-col overflow-hidden rounded-3xl bg-white/5 border border-white/10 p-8 backdrop-blur-2xl transition-all duration-500 hover:bg-white/[0.08] hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]">
+                  {/* Glass highlight */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className={`size-14 rounded-2xl border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 ${item.themeGroup.split(' ').slice(1).join(' ')}`}>
+                    <item.icon className="size-7" />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold mb-3">{item.role}</h3>
+                  <p className="text-zinc-400 font-medium flex-1 mb-6 leading-relaxed">
+                    {item.desc}
+                  </p>
+                  
+                  <div className={`flex items-center text-sm font-semibold mt-auto ${item.buttonColor}`}>
+                    Explore Portal <ArrowRight className="ml-2 size-4 group-hover:translate-x-1.5 transition-transform" />
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
-  );
+  )
 }
