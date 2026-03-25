@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rationify Next-Gen Portal 🌾
 
-## Getting Started
+A beautifully designed, ultra-modern Public Distribution System (PDS) portal crafted with Next.js 14, Framer Motion, and Tailwind CSS. The application features a fully responsive Glassmorphic aesthetic, parallax backgrounds, and mock offline database functionality via SQLite.
 
-First, run the development server:
+## ✨ Features
+- **Premium Glassmorphic UI:** Built with backdrop-blur cards, fluid gradients, and Framer Motion spring animations.
+- **Offline Mock DB:** Uses Prisma ORM with SQLite, so no complex PostgreSQL setups or external database dependencies are required. Just run it!
+- **Role-Based Portals:**
+  - **Admin / Owner Dashboard:** Manage consumers, verify active token queues, and check real-time complaints statistics.
+  - **Consumer Dashboard:** Let verified users safely request tokens, ask for home drops, and track delivery status.
+  - **Delivery Agent Navigation:** Verify home deliveries securely using 6-Digit OTPs.
+- **Zero Authentication Wall:** Removed NextAuth layers for immediate demo and testing accessibility!
 
+## 🚀 Getting Started
+
+1. **Install Dependencies:**
+```bash
+npm install
+```
+
+2. **Generate Database & Seed:**
+We are using `SQLite` locally so the process is instant.
+```bash
+npx prisma db push
+npx prisma db seed
+```
+
+3. **Run the Development Server:**
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Test Accounts (Default Seed)
+After running the seed script, log into any portal. The data interacts with these default mock accounts:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Admin/Owner Phone No:** `9999999999`
+- **Delivery Agent Phone No:** `8888888888`
+- **Consumer Phone No:** `7777777777`
 
-## Learn More
+*Note: Any delivery OTPs generated natively inside the portal default to `123456` during testing scenarios.*
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Built With
+- **Next.js 14** (App Router)
+- **TypeScript**
+- **Tailwind CSS & shadcn/ui**
+- **Framer Motion** (Spring Animations & Parallax)
+- **Prisma & SQLite**
