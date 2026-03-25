@@ -1,22 +1,20 @@
 "use server"
 
-import { getMockDb } from "./owner"
+import { mockDb } from "../mockDb"
 
 export async function getConsumerData() {
-  const mockDb = getMockDb()
-  const user = mockDb.users.find(u => u.role === "CONSUMER")
+  const user = mockDb.users.find((u: any) => u.role === "CONSUMER")
   if (!user) return null
 
-  const tokens = mockDb.tokens.filter(t => t.userId === user.id)
-  const deliveryRequests = mockDb.deliveryRequests.filter(d => d.userId === user.id)
-  const complaints = mockDb.complaints.filter(c => c.userId === user.id)
+  const tokens = mockDb.tokens.filter((t: any) => t.userId === user.id)
+  const deliveryRequests = mockDb.deliveryRequests.filter((d: any) => d.userId === user.id)
+  const complaints = mockDb.complaints.filter((c: any) => c.userId === user.id)
 
   return { user, tokens, deliveryRequests, complaints }
 }
 
 export async function requestToken(formData: FormData) {
-  const mockDb = getMockDb()
-  const user = mockDb.users.find(u => u.role === "CONSUMER")
+  const user = mockDb.users.find((u: any) => u.role === "CONSUMER")
   if (!user) return { error: "Consumer not found" }
 
   const dateStr = formData.get("date") as string
@@ -34,8 +32,7 @@ export async function requestToken(formData: FormData) {
 }
 
 export async function requestDelivery(formData: FormData) {
-  const mockDb = getMockDb()
-  const user = mockDb.users.find(u => u.role === "CONSUMER")
+  const user = mockDb.users.find((u: any) => u.role === "CONSUMER")
   if (!user) return { error: "Consumer not found" }
 
   const address = formData.get("address") as string
@@ -46,15 +43,14 @@ export async function requestDelivery(formData: FormData) {
     address,
     status: "PENDING",
     otp: Math.floor(100000 + Math.random() * 900000).toString(),
-    agentId: null
+    agentId: null as string | null
   })
 
   return { success: true }
 }
 
 export async function submitComplaint(formData: FormData) {
-  const mockDb = getMockDb()
-  const user = mockDb.users.find(u => u.role === "CONSUMER")
+  const user = mockDb.users.find((u: any) => u.role === "CONSUMER")
   if (!user) return { error: "Consumer not found" }
 
   const type = formData.get("type") as string
