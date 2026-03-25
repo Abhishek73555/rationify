@@ -1,71 +1,72 @@
 "use server"
 
-import { prisma } from "@/lib/prisma"
-import { revalidatePath } from "next/cache"
-
-async function verifyConsumer() {
-  const user = await prisma.user.findFirst({ where: { role: "CONSUMER" } })
-  if (!user) throw new Error("No consumer found")
-  return { user }
-}
+import { getMockDb } from "./owner"
 
 export async function getConsumerData() {
-  const session = await verifyConsumer()
-  const userId = session.user.id
+  const mockDb = getMockDb()
+  const user = mockDb.users.find(u => u.role === "CONSUMER")
+  if (!user) return null
 
-  const [tokens, deliveryRequests, complaints] = await Promise.all([
-    prisma.token.findMany({ where: { userId }, orderBy: { createdAt: "desc" } }),
-    prisma.deliveryRequest.findMany({ where: { userId }, orderBy: { createdAt: "desc" } }),
-    prisma.complaint.findMany({ where: { userId }, orderBy: { createdAt: "desc" } }),
-  ])
-  return { tokens, deliveryRequests, complaints }
+  const tokens = mockDb.tokens.filter(t => t.userId === user.id)
+  const deliveryRequests = mockDb.deliveryRequests.filter(d => d.userId === user.id)
+  const complaints = mockDb.complaints.filter(c => c.userId === user.id)
+
+  return { user, tokens, deliveryRequests, complaints }
 }
 
 export async function requestToken(formData: FormData) {
-  const session = await verifyConsumer()
-  const date = formData.get("date") as string
+  const mockDb = getMockDb()
+  const user = mockDb.users.find(u => u.role === "CONSUMER")
+  if (!user) return { error: "Consumer not found" }
+
+  const dateStr = formData.get("date") as string
   const timeSlot = formData.get("timeSlot") as string
 
-  if (!date || !timeSlot) return { error: "Missing fields" }
-
-  await prisma.token.create({
-    data: {
-      userId: session.user.id,
-      date: new Date(date),
-      timeSlot,
-    }
+  mockDb.tokens.push({
+    id: `t_${Date.now()}`,
+    userId: user.id,
+    date: new Date(dateStr) as any, // Mock Date
+    timeSlot,
+    status: "PENDING"
   })
-  revalidatePath("/consumer")
+
+  return { success: true }
 }
 
 export async function requestDelivery(formData: FormData) {
-  const session = await verifyConsumer()
-  const address = formData.get("address") as string
-  if (!address) return { error: "Address is required" }
+  const mockDb = getMockDb()
+  const user = mockDb.users.find(u => u.role === "CONSUMER")
+  if (!user) return { error: "Consumer not found" }
 
-  await prisma.deliveryRequest.create({
-    data: {
-      userId: session.user.id,
-      address,
-      otp: Math.floor(100000 + Math.random() * 900000).toString(), // Generate a 6-digit OTP
-    }
+  const address = formData.get("address") as string
+
+  mockDb.deliveryRequests.push({
+    id: `d_${Date.now()}`,
+    userId: user.id,
+    address,
+    status: "PENDING",
+    otp: Math.floor(100000 + Math.random() * 900000).toString(),
+    agentId: null
   })
-  revalidatePath("/consumer")
+
+  return { success: true }
 }
 
 export async function submitComplaint(formData: FormData) {
-  const session = await verifyConsumer()
-  const type = formData.get("type") as any
+  const mockDb = getMockDb()
+  const user = mockDb.users.find(u => u.role === "CONSUMER")
+  if (!user) return { error: "Consumer not found" }
+
+  const type = formData.get("type") as string
   const message = formData.get("message") as string
 
-  if (!type || !message) return { error: "Missing fields" }
-
-  await prisma.complaint.create({
-    data: {
-      userId: session.user.id,
-      type,
-      message,
-    }
+  mockDb.complaints.push({
+    id: `c_${Date.now()}`,
+    userId: user.id,
+    type,
+    message,
+    status: "OPEN"
   })
-  revalidatePath("/consumer")
+
+  return { success: true }
 }

@@ -18,14 +18,7 @@ A beautifully designed, ultra-modern Public Distribution System (PDS) portal cra
 npm install
 ```
 
-2. **Generate Database & Seed:**
-We are using `SQLite` locally so the process is instant.
-```bash
-npx prisma db push
-npx prisma db seed
-```
-
-3. **Run the Development Server:**
+2. **Run the Development Server:**
 ```bash
 npm run dev
 ```
