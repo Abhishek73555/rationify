@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description: "A secure and transparent Public Distribution System for rations.",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
