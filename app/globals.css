@@ -9,7 +9,6 @@
     text-wrap: balance;
   }
 }
-
 @layer base {
   .theme {
     --font-heading: var(--font-sans);
